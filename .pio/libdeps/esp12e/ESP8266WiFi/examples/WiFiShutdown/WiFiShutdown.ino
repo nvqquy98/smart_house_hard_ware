@@ -21,13 +21,14 @@
 
 WiFiState state;
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
-void setup() {
+void setup()
+{
   Serial.begin(74880);
-  //Serial.setDebugOutput(true);  // If you need debug output
-  Serial.println("Trying to resume WiFi connection...");
+  // Serial.setDebugOutput(true);  // If you need debug output
+  //  Serial.println("Trying to resume WiFi connection...");
 
   // May be necessary after deepSleep. Otherwise you may get "error: pll_cal exceeds 2ms!!!" when trying to connect
   delay(1);
@@ -39,14 +40,13 @@ void setup() {
   ESP.rtcUserMemoryRead(RTC_USER_DATA_SLOT_WIFI_STATE, reinterpret_cast<uint32_t *>(&state), sizeof(state));
   unsigned long start = millis();
 
-  if (!WiFi.resumeFromShutdown(state)
-      || (WiFi.waitForConnectResult(10000) != WL_CONNECTED)) {
+  if (!WiFi.resumeFromShutdown(state) || (WiFi.waitForConnectResult(10000) != WL_CONNECTED))
+  {
     Serial.println("Cannot resume WiFi connection, connecting via begin...");
     WiFi.persistent(false);
 
-    if (!WiFi.mode(WIFI_STA)
-        || !WiFi.begin(ssid, password)
-        || (WiFi.waitForConnectResult(10000) != WL_CONNECTED)) {
+    if (!WiFi.mode(WIFI_STA) || !WiFi.begin(ssid, password) || (WiFi.waitForConnectResult(10000) != WL_CONNECTED))
+    {
       WiFi.mode(WIFI_OFF);
       Serial.println("Cannot connect!");
       Serial.flush();
@@ -75,6 +75,7 @@ void setup() {
   ESP.deepSleep(10e6, RF_DISABLED);
 }
 
-void loop() {
+void loop()
+{
   // Nothing to do here.
 }

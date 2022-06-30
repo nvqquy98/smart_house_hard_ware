@@ -21,7 +21,8 @@ ESP8266WiFiMulti wifiMulti;
 // WiFi connect timeout per AP. Increase when connecting takes longer.
 const uint32_t connectTimeoutMs = 5000;
 
-void setup() {
+void setup()
+{
   // Don't save WiFi configuration in flash - optional
   WiFi.persistent(false);
 
@@ -38,14 +39,18 @@ void setup() {
   // More is possible
 }
 
-void loop() {
+void loop()
+{
   // Maintain WiFi connection
-  if (wifiMulti.run(connectTimeoutMs) == WL_CONNECTED) {
+  if (wifiMulti.run(connectTimeoutMs) == WL_CONNECTED)
+  {
     Serial.print("WiFi connected: ");
     Serial.print(WiFi.SSID());
     Serial.print(" ");
     Serial.println(WiFi.localIP());
-  } else {
+  }
+  else
+  {
     Serial.println("WiFi not connected!");
   }
 

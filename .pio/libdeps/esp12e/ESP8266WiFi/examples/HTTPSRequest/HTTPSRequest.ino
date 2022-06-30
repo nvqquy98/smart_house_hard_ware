@@ -17,22 +17,24 @@
 
 #ifndef STASSID
 #define STASSID "your-ssid"
-#define STAPSK  "your-password"
+#define STAPSK "your-password"
 #endif
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
 X509List cert(cert_DigiCert_High_Assurance_EV_Root_CA);
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
   Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -46,7 +48,8 @@ void setup() {
 
   Serial.print("Waiting for NTP time sync: ");
   time_t now = time(nullptr);
-  while (now < 8 * 3600 * 2) {
+  while (now < 8 * 3600 * 2)
+  {
     delay(500);
     Serial.print(".");
     now = time(nullptr);
@@ -65,7 +68,8 @@ void setup() {
   Serial.printf("Using certificate: %s\n", cert_DigiCert_High_Assurance_EV_Root_CA);
   client.setTrustAnchors(&cert);
 
-  if (!client.connect(github_host, github_port)) {
+  if (!client.connect(github_host, github_port))
+  {
     Serial.println("Connection failed");
     return;
   }
@@ -80,17 +84,22 @@ void setup() {
                "Connection: close\r\n\r\n");
 
   Serial.println("Request sent");
-  while (client.connected()) {
+  while (client.connected())
+  {
     String line = client.readStringUntil('\n');
-    if (line == "\r") {
+    if (line == "\r")
+    {
       Serial.println("Headers received");
       break;
     }
   }
   String line = client.readStringUntil('\n');
-  if (line.startsWith("{\"state\":\"success\"")) {
+  if (line.startsWith("{\"state\":\"success\""))
+  {
     Serial.println("esp8266/Arduino CI successful!");
-  } else {
+  }
+  else
+  {
     Serial.println("esp8266/Arduino CI has failed");
   }
   Serial.println("Reply was:");
@@ -100,5 +109,6 @@ void setup() {
   Serial.println("Closing connection");
 }
 
-void loop() {
+void loop()
+{
 }

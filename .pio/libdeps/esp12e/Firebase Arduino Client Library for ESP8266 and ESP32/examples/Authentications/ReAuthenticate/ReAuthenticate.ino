@@ -115,7 +115,7 @@ void setup()
 
 void loop()
 {
-    
+
     // Firebase.ready() should be called repeatedly to handle authentication tasks.
 
     if (millis() - dataMillis > 5000)

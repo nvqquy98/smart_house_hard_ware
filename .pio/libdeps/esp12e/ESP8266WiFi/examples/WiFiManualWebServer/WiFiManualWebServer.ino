@@ -11,17 +11,18 @@
 
 #ifndef STASSID
 #define STASSID "your-ssid"
-#define STAPSK  "your-password"
+#define STAPSK "your-password"
 #endif
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
 // Create an instance of the server
 // specify the port to listen on as an argument
 WiFiServer server(80);
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
 
   // prepare LED
@@ -37,7 +38,8 @@ void setup() {
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
 
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(F("."));
   }
@@ -52,10 +54,12 @@ void setup() {
   Serial.println(WiFi.localIP());
 }
 
-void loop() {
+void loop()
+{
   // Check if a client has connected
   WiFiClient client = server.available();
-  if (!client) {
+  if (!client)
+  {
     return;
   }
   Serial.println(F("new client"));
@@ -69,11 +73,16 @@ void loop() {
 
   // Match the request
   int val;
-  if (req.indexOf(F("/gpio/0")) != -1) {
+  if (req.indexOf(F("/gpio/0")) != -1)
+  {
     val = 0;
-  } else if (req.indexOf(F("/gpio/1")) != -1) {
+  }
+  else if (req.indexOf(F("/gpio/1")) != -1)
+  {
     val = 1;
-  } else {
+  }
+  else
+  {
     Serial.println(F("invalid request"));
     val = digitalRead(LED_BUILTIN);
   }
@@ -83,7 +92,8 @@ void loop() {
 
   // read/ignore the rest of the request
   // do not client.flush(): it is for output only, see below
-  while (client.available()) {
+  while (client.available())
+  {
     // byte by byte is not very efficient
     client.read();
   }

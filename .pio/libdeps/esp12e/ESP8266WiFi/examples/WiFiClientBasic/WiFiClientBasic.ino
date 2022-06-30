@@ -9,18 +9,19 @@
 
 #ifndef STASSID
 #define STASSID "your-ssid"
-#define STAPSK  "your-password"
+#define STAPSK "your-password"
 #endif
 
-const char* ssid     = STASSID;
-const char* password = STAPSK;
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
-const char* host = "192.168.1.1";
+const char *host = "192.168.1.1";
 const uint16_t port = 3000;
 
 ESP8266WiFiMulti WiFiMulti;
 
-void setup() {
+void setup()
+{
   Serial.begin(115200);
 
   // We start by connecting to a WiFi network
@@ -31,7 +32,8 @@ void setup() {
   Serial.println();
   Serial.print("Wait for WiFi... ");
 
-  while (WiFiMulti.run() != WL_CONNECTED) {
+  while (WiFiMulti.run() != WL_CONNECTED)
+  {
     Serial.print(".");
     delay(500);
   }
@@ -44,8 +46,8 @@ void setup() {
   delay(500);
 }
 
-
-void loop() {
+void loop()
+{
   Serial.print("connecting to ");
   Serial.print(host);
   Serial.print(':');
@@ -54,7 +56,8 @@ void loop() {
   // Use WiFiClient class to create TCP connections
   WiFiClient client;
 
-  if (!client.connect(host, port)) {
+  if (!client.connect(host, port))
+  {
     Serial.println("connection failed");
     Serial.println("wait 5 sec...");
     delay(5000);
@@ -64,8 +67,8 @@ void loop() {
   // This will send the request to the server
   client.println("hello from ESP8266");
 
-  //read back one line from server
-  Serial.println("receiving from remote server");
+  // read back one line from server
+  //  Serial.println("receiving from remote server");
   String line = client.readStringUntil('\r');
   Serial.println(line);
 
@@ -75,4 +78,3 @@ void loop() {
   Serial.println("wait 5 sec...");
   delay(5000);
 }
-

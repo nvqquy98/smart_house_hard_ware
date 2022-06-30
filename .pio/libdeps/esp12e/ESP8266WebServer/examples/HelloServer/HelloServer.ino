@@ -5,23 +5,25 @@
 
 #ifndef STASSID
 #define STASSID "your-ssid"
-#define STAPSK  "your-password"
+#define STAPSK "your-password"
 #endif
 
-const char* ssid = STASSID;
-const char* password = STAPSK;
+const char *ssid = STASSID;
+const char *password = STAPSK;
 
 ESP8266WebServer server(80);
 
 const int led = 13;
 
-void handleRoot() {
+void handleRoot()
+{
   digitalWrite(led, 1);
   server.send(200, "text/plain", "hello from esp8266!\r\n");
   digitalWrite(led, 0);
 }
 
-void handleNotFound() {
+void handleNotFound()
+{
   digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -31,14 +33,16 @@ void handleNotFound() {
   message += "\nArguments: ";
   message += server.args();
   message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++) {
+  for (uint8_t i = 0; i < server.args(); i++)
+  {
     message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
   }
   server.send(404, "text/plain", message);
   digitalWrite(led, 0);
 }
 
-void setup(void) {
+void setup(void)
+{
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
   Serial.begin(115200);
@@ -47,7 +51,8 @@ void setup(void) {
   Serial.println("");
 
   // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
+  while (WiFi.status() != WL_CONNECTED)
+  {
     delay(500);
     Serial.print(".");
   }
@@ -57,17 +62,18 @@ void setup(void) {
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
-  if (MDNS.begin("esp8266")) {
+  if (MDNS.begin("esp8266"))
+  {
     Serial.println("MDNS responder started");
   }
 
   server.on("/", handleRoot);
 
-  server.on("/inline", []() {
-    server.send(200, "text/plain", "this works as well");
-  });
+  server.on("/inline", []()
+            { server.send(200, "text/plain", "this works as well"); });
 
-  server.on("/gif", []() {
+  server.on("/gif", []()
+            {
     static const uint8_t gif[] PROGMEM = {
       0x47, 0x49, 0x46, 0x38, 0x37, 0x61, 0x10, 0x00, 0x10, 0x00, 0x80, 0x01,
       0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x2c, 0x00, 0x00, 0x00, 0x00,
@@ -81,33 +87,33 @@ void setup(void) {
     gif_colored[16] = millis() % 256;
     gif_colored[17] = millis() % 256;
     gif_colored[18] = millis() % 256;
-    server.send(200, "image/gif", gif_colored, sizeof(gif_colored));
-  });
+    server.send(200, "image/gif", gif_colored, sizeof(gif_colored)); });
 
   server.onNotFound(handleNotFound);
 
   /////////////////////////////////////////////////////////
   // Hook examples
 
-  server.addHook([](const String & method, const String & url, WiFiClient * client, ESP8266WebServer::ContentTypeFunction contentType) {
+  server.addHook([](const String &method, const String &url, WiFiClient *client, ESP8266WebServer::ContentTypeFunction contentType)
+                 {
     (void)method;      // GET, PUT, ...
     (void)url;         // example: /root/myfile.html
     (void)client;      // the webserver tcp client connection
     (void)contentType; // contentType(".html") => "text/html"
     Serial.printf("A useless web hook has passed\n");
     Serial.printf("(this hook is in 0x%08x area (401x=IRAM 402x=FLASH))\n", esp_get_program_counter());
-    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE;
-  });
+    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE; });
 
-  server.addHook([](const String&, const String & url, WiFiClient*, ESP8266WebServer::ContentTypeFunction) {
+  server.addHook([](const String &, const String &url, WiFiClient *, ESP8266WebServer::ContentTypeFunction)
+                 {
     if (url.startsWith("/fail")) {
       Serial.printf("An always failing web hook has been triggered\n");
       return ESP8266WebServer::CLIENT_MUST_STOP;
     }
-    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE;
-  });
+    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE; });
 
-  server.addHook([](const String&, const String & url, WiFiClient * client, ESP8266WebServer::ContentTypeFunction) {
+  server.addHook([](const String &, const String &url, WiFiClient *client, ESP8266WebServer::ContentTypeFunction)
+                 {
     if (url.startsWith("/dump")) {
       Serial.printf("The dumper web hook is on the run\n");
 
@@ -140,8 +146,7 @@ void setup(void) {
       static WiFiClient forgetme = *client; // stop previous one if present and transfer client refcounter
       return ESP8266WebServer::CLIENT_IS_GIVEN;
     }
-    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE;
-  });
+    return ESP8266WebServer::CLIENT_REQUEST_CAN_CONTINUE; });
 
   // Hook examples
   /////////////////////////////////////////////////////////
@@ -150,7 +155,8 @@ void setup(void) {
   Serial.println("HTTP server started");
 }
 
-void loop(void) {
+void loop(void)
+{
   server.handleClient();
   MDNS.update();
 }

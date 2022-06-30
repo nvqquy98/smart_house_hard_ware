@@ -27,7 +27,7 @@
  * You need to upload the zip file "gcf.zip" in the data folder to the falsh memory at "/gcf.zip".
  *
  * File gcf.zip contains the sources of function firestoreImageDownloadTrigger.
- * 
+ *
  * The name of zip file should be short to avoid long file name image data upload error in IDE.
  *
  * After the firestoreImageDownloadTrigger function in gcf.zip was deployed successfully, create the collection "ImageList" and try to add the document in it which contains the field url and name fields.

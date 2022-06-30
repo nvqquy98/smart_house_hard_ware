@@ -104,7 +104,7 @@ void setup()
     // In ESP8266 required for BearSSL rx/tx buffer for large data handle, increase Rx size as needed.
     fbdo.setBSSLBufferSize(2048 /* Rx buffer size in bytes from 512 - 16384 */, 2048 /* Tx buffer size in bytes from 512 - 16384 */);
 #endif
-    
+
     // Limit the size of response payload to be collected in FirebaseData
     fbdo.setResponseSize(2048);
 
